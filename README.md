@@ -1,2 +1,17 @@
-# Complejidad computacional - Facultad de Ciencias, UNAM. 2026-2
-Material para el curso de Complejidad Computacional.
+## Lista de ejercicios de Complejidad Computacional.
+
+¡Bienvenidos al repositorio de ejercicios! Aquí encontrarán siempre la versión más reciente de la guía de estudio.
+
+---
+
+## Acceso Rápido
+Para ver o descargar los ejercicios actuales, haz clic en el siguiente enlace:
+
+### 👉 [**DESCARGAR GUÍA EN PDF**](https://github.com/LuisRicardoLopezVillafan/Complejidad_computacional_FC_2026-2/raw/main/ejercicios.pdf)
+
+---
+- **Formato:** El archivo fuente está escrito en LaTeX (`ejercicios.tex`).
+- **Consultas:** Si encuentras un error en un ejercicio, por favor avísame en clase.
+
+---
+*Repositorio mantenido por el Prof. Luis Ricardo López Villafán*
