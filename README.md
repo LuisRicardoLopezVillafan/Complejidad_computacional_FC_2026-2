@@ -1,2 +1,2 @@
-# Complejidad_computacional_FC_2026-2
-Descripcion
+# Complejidad computacional - Facultad de Ciencias, UNAM. 2026-2
+Material para el curso de Complejidad Computacional.
