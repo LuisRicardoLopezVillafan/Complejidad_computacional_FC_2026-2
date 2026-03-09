@@ -10,7 +10,7 @@ Para ver o descargar los ejercicios actuales, haz clic en el siguiente enlace:
 ### 👉 [**DESCARGAR GUÍA EN PDF**](https://github.com/LuisRicardoLopezVillafan/Complejidad_computacional_FC_2026-2/raw/main/main.pdf)
 
 ---
-- **Formato:** El archivo fuente está escrito en LaTeX (`ejercicios.tex`).
+- **Formato:** El archivo fuente está escrito en LaTeX (`main.tex`).
 - **Consultas:** Si encuentras un error en un ejercicio, por favor avísame en clase.
 
 ---
