@@ -96,5 +96,14 @@ algorithm,
         \end{definition}
         Muestra que para toda función construible en tiempo $T:\mathbb{N}\longrightarrow \mathbb{N}$, si el lenguaje $L$ pertenece al conjunto $\mathbf{DTIME}(T(n))$, entonces existe una máquina de Turing olvidadiza que decide $L$ en tiempo $O(T^2)$.
         \item Muestra que para cada función construible en tiempo $T:\mathbb{N}\longrightarrow \mathbb{N}$, si $L\in \mathbf{DITME}(T(n))$, entonces hay una máquina de Turing que decide $L$ en tiempo $O\big(T(n)\log T(n)\big)$.
+
+        \item Muestra que los siguientes lenguajes pertenecen a la clase $\mathbf{P}$:
+        \begin{enumerate}
+            \item El lenguaje de los números pares:
+            \[L:=\big\{x\in \{0,1\}^*:\exists n\in \mathbb{N}\,\big(n\textit{ es par }\wedge x=Bin(n)\big)\big\}.\]
+            \item El lenguaje de los números primos \[L:=\big\{x\in \{0,1\}^*:\exists n\in \mathbb{N}\,\big(n\textit{ es primo }\wedge x=Bin(n)\big)\big\}.\]
+            \item El lenguaje $\texttt{CONNECTED}\subseteq\{0,1\}^*$ definido por la siguiente regla:$x\in \texttt{CONNECTED}$ si y sólo si $x$ es la representación como cadena binaria de una gráfica no dirigida $G=(V,E)$ en la que para cualesquiera vértices $x,y\in V$, existe un camino que conecta a $x$ con $y$. 
+        \end{enumerate}
+        \item Muestra que para cada función construible $T:\mathbb{N}\longrightarrow \mathbb{N}$, si $L\in \mathbf{DTIME}(T(n))$, entonces existe una máquina de Turing olvidadiza que decide $L$ en tiempo $O(T(n)\log T(n))$.
 \end{enumerate}
 \end{document}
