@@ -1,0 +1,100 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage{amsmath, amsthm, amssymb,  wasysym, verbatim, bbm, color, graphics, geometry, dirtytalk, 
+multicol,
+algorithm,
+%algorithm2e,
+%algorithmic,
+}
+%\usepackage{calrsfs}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode} % suppresses "end while", etc.
+\usepackage{algorithmicx}
+\algrenewcommand\algorithmicindent{2.0em} %
+\usepackage[spanish]{babel}
+\usepackage{marginnote}
+\geometry{tmargin=.75in, bmargin=.75in, lmargin=.75in, rmargin = .75in}  
+%Configurar manualmente la primera sección
+ \setcounter{section}{0}
+\usepackage{dirtytalk}
+\usepackage{tikz}
+\renewcommand\thempfootnote{\arabic{mpfootnote}} 
+\renewcommand{\contentsname}{Contenido}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}} 
+\newcommand{\C}{\mathcal{C}} 
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\renewcommand{\P}{\mathcal{P}}
+\newcommand{\dde}{\Delta}
+\newcommand{\ala}{^}
+\renewcommand{\t}{\text}
+\renewcommand{\r}{\rightarrow}
+% \newcommand{\s}{\subseteq}
+\renewcommand{\u}{\unlhd}
+\newcommand{\tr}{\vartriangleleft}
+\newcommand{\re}{\restriction}
+\newcommand{\pr}{\preccurlyeq}
+\newcommand{\prefacename}{Prefacio}
+\newtheorem{lemma}{Lema}[section]
+\newtheorem{proposition}{Proposici\'on}[section]
+\newtheorem{theorem}{Teorema}[section]
+\newtheorem*{theorem*}{Teorema}
+\newtheorem{corollary}{Corolario}[section]
+\newtheorem{fact}{Hecho}[section]
+\newtheorem{claim}{Afirmaci\'on}[section]
+
+\theoremstyle{definition}
+\newtheorem{example}{Ejemplo}[section]
+\newtheorem{example*}{Ejemplo}
+\newtheorem{definition}{Definici\'on}[section]
+\newtheorem{remark}{Nota}[section]
+\newtheorem*{remark*}{Nota}
+\newtheorem{eje}{Ejercicio}[section]
+\newtheorem{question}{Pregunta}[section]
+\newtheorem{notation}{Notaci\'on}[section]
+\newtheorem*{notation*}{Notaci\'on}
+
+\newtheorem{thm}{Theorem}
+\newtheorem{defn}{Definition}
+\newtheorem{conv}{Convention}
+\newtheorem{rem}{Remark}
+\newtheorem{lem}{Lemma}
+\newtheorem{cor}{Corollary}
+
+\title{Lista de ejercicios}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+% \tableofcontents
+\vspace{.25in}
+
+\begin{enumerate}
+    \item Muestra cómo puedes traducir la información de los siguientes objetos como cadenas binarias, de modo que ser un \textit{input} en una máquina de Turing:
+        \begin{enumerate}
+            \item Una gráfica binaria (no ponderada) y no dirigida.
+            \item Una gráfica ponderada y no dirigida.
+            \item Una gráfica binaria y dirigida.
+            \item Una gráfica ponderada y dirigida.
+        \end{enumerate}
+
+    \item Muestra que las siguientes operaciones son funciones computables, dando la descripción detallada de una máquina de Turing que las compute.
+        \begin{enumerate}
+            \item La operación de suma entre números naturales.
+            \item La operación de multiplicación entre números naturales.
+            \item La operación de \textit{duplicar una cadena}, i.e. si se le aplica la operación a la cadena $w$, el resultado es la cadena $ww$.
+            \item La operación de comparar dos cadenas. Esta operación recibe dos cadenas como entrada, y arroja un 1 como salida si las cadenas son iguales, y un 0 si son diferentes. 
+            \item La operación que verifica si una cadena es un palíndromo.
+        \end{enumerate}
+
+        \item Para este ejercicio, primero damos la siguiente definición:
+        \begin{definition}\label{oblivous tm}
+        Decimos que una máquina de Turing es \textit{olvidadiza} si las transiciones de sus estados no dependen del contenido de una entrada, solamente de la longitud de la misma. Es decir, una máquina $M$ es olvidadiza si y solo si, para cualesquiera cadenas de entrada $x, y\in \{0,1\}^*$, si $\lvert x\rvert = \lvert y \rvert,$ entonces $M(x)=M(y)$.
+        \end{definition}
+        Muestra que para toda función construible en tiempo $T:\mathbb{N}\longrightarrow \mathbb{N}$, si el lenguaje $L$ pertenece al conjunto $\mathbf{DTIME}(T(n))$, entonces existe una máquina de Turing olvidadiza que decide $L$ en tiempo $O(T^2)$.
+        \item Muestra que para cada función construible en tiempo $T:\mathbb{N}\longrightarrow \mathbb{N}$, si $L\in \mathbf{DITME}(T(n))$, entonces hay una máquina de Turing que decide $L$ en tiempo $O\big(T(n)\log T(n)\big)$.
+\end{enumerate}
+\end{document}
