@@ -1,0 +1,1165 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grafo a Cadena Binaria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <script>
+    window.MathJax = {
+      tex: { inlineMath: [["$", "$"], ["\\(", "\\)"]] },
+      svg: { fontCache: "global" }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+  <style>
+    :root {
+      --bg-1: #fdfcf7;
+      --bg-2: #f4efe2;
+      --ink: #1f2937;
+      --ink-soft: #4b5563;
+      --panel: rgba(255, 255, 255, 0.78);
+      --line: #d5cdb6;
+      --accent: #0f766e;
+      --accent-2: #b45309;
+      --node: #0f766e;
+      --node-text: #f8fafc;
+      --edge: #475569;
+      --ok: #166534;
+      --danger: #991b1b;
+      --shadow: 0 12px 40px rgba(15, 23, 42, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Space Grotesk", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(15, 118, 110, 0.15), transparent 45%),
+        radial-gradient(circle at 90% 20%, rgba(180, 83, 9, 0.15), transparent 42%),
+        linear-gradient(140deg, var(--bg-1), var(--bg-2));
+      overflow-x: hidden;
+    }
+
+    .wrap {
+      width: min(1100px, 92vw);
+      margin: 2rem auto 4rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 1.4rem 1.4rem 1rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+      animation: rise 600ms ease-out;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.3rem, 2.3vw, 2rem);
+      letter-spacing: 0.01em;
+    }
+
+    .subtitle {
+      margin-top: 0.6rem;
+      color: var(--ink-soft);
+      line-height: 1.4;
+      max-width: 78ch;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 1rem;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+      animation: rise 700ms ease-out;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      margin-bottom: 0.7rem;
+      font-weight: 700;
+    }
+
+    .step-badge {
+      width: 1.8rem;
+      height: 1.8rem;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: #fff;
+      background: linear-gradient(145deg, var(--accent), #155e75);
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      align-items: center;
+    }
+
+    input[type="number"] {
+      width: 120px;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid #9ca3af;
+      border-radius: 10px;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.95rem;
+      color: var(--ink);
+      background: #fff;
+    }
+
+    button {
+      border: 0;
+      border-radius: 10px;
+      padding: 0.58rem 0.9rem;
+      font-family: inherit;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      transition: transform 140ms ease, filter 140ms ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.04);
+    }
+
+    .btn-main {
+      background: linear-gradient(145deg, var(--accent), #155e75);
+      color: #fff;
+    }
+
+    .btn-alt {
+      background: #f1ede0;
+      border: 1px solid var(--line);
+      color: #374151;
+    }
+
+    .hint {
+      font-size: 0.92rem;
+      color: var(--ink-soft);
+      margin-top: 0.55rem;
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-top: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .range-row input[type="range"] {
+      width: min(320px, 70vw);
+      accent-color: var(--accent);
+    }
+
+    .range-val {
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.9rem;
+      color: #374151;
+      background: #f3f4f6;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      padding: 0.12rem 0.42rem;
+    }
+
+    .matrix-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px dashed #b0a58a;
+      padding: 0.7rem;
+      background: rgba(255, 255, 255, 0.45);
+    }
+
+    table {
+      border-collapse: collapse;
+      margin: 0.2rem auto;
+    }
+
+    th,
+    td {
+      border: 1px solid #b8ac90;
+      text-align: center;
+      min-width: 2.35rem;
+      height: 2.35rem;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: #efe9d6;
+      color: #3f3f46;
+      font-weight: 600;
+    }
+
+    .diag-cell {
+      background: #f4f4f5;
+      color: #6b7280;
+    }
+
+    .bit-btn {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      border: 0;
+      background: #fff;
+      font-family: "IBM Plex Mono", monospace;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .bit-btn.active {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .viz-box {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.6rem;
+      background: rgba(255, 255, 255, 0.56);
+    }
+
+    .viz-title {
+      margin: 0.2rem 0 0.55rem;
+      color: #374151;
+      font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    #graphSvg {
+      width: 100%;
+      height: min(430px, 56vw);
+      min-height: 260px;
+      display: block;
+      border-radius: 10px;
+      background:
+        linear-gradient(0deg, rgba(148, 163, 184, 0.08), rgba(148, 163, 184, 0.08));
+    }
+
+    .tape {
+      display: flex;
+      gap: 0.2rem;
+      overflow-x: auto;
+      padding-bottom: 0.35rem;
+      scrollbar-width: thin;
+    }
+
+    .cell {
+      width: 1.95rem;
+      min-width: 1.95rem;
+      height: 2.25rem;
+      border-radius: 6px;
+      border: 1px solid #d1d5db;
+      display: grid;
+      place-items: center;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.95rem;
+      background: #fff;
+      animation: pop 260ms ease-out;
+      position: relative;
+    }
+
+    .cell.vertex {
+      background: #ede9fe;
+      border-color: #c4b5fd;
+      color: #4c1d95;
+      font-weight: 700;
+    }
+
+    .cell.sep {
+      background: #fde68a;
+      border-color: #f59e0b;
+      color: #78350f;
+      font-weight: 700;
+    }
+
+    .cell.head {
+      border-color: #dc2626;
+      box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.24);
+    }
+
+    .cell.head::after {
+      content: "^";
+      position: absolute;
+      top: -1.02rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #dc2626;
+      font-weight: 700;
+      font-family: "IBM Plex Mono", monospace;
+    }
+
+    .sim-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 0.75rem;
+    }
+
+    .sim-status {
+      margin-top: 0.55rem;
+      font-size: 0.92rem;
+      color: #374151;
+      min-height: 1.2rem;
+    }
+
+    .sim-result {
+      margin-top: 0.45rem;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.96rem;
+      font-weight: 700;
+      color: #111827;
+      min-height: 1.25rem;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+    }
+
+    .calc-box {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.6);
+      padding: 0.8rem;
+    }
+
+    .calc-row {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      margin-top: 0.45rem;
+    }
+
+    .calc-row input[type="number"] {
+      width: 160px;
+    }
+
+    .calc-out {
+      margin-top: 0.55rem;
+      font-family: "IBM Plex Mono", monospace;
+      font-size: 0.93rem;
+      color: #1f2937;
+      line-height: 1.45;
+    }
+
+    .formula-box {
+      margin-top: 0.5rem;
+      border: 1px solid #d8d6c8;
+      background: #faf9f4;
+      border-radius: 10px;
+      padding: 0.55rem 0.7rem;
+      color: #1f2937;
+      font-size: 0.93rem;
+      overflow-x: auto;
+    }
+
+    .calc-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.7rem;
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .calc-table th,
+    .calc-table td {
+      border: 1px solid #ddd6bd;
+      text-align: left;
+      padding: 0.42rem 0.55rem;
+      font-size: 0.91rem;
+      vertical-align: top;
+    }
+
+    .calc-table th {
+      background: #f4efdf;
+      color: #3f3f46;
+      width: 52%;
+    }
+
+    .legend {
+      margin-top: 0.5rem;
+      font-size: 0.84rem;
+      color: #4b5563;
+      line-height: 1.3;
+    }
+
+    #complexityCanvas {
+      width: 100%;
+      height: 260px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      background: #ffffff;
+      display: block;
+    }
+
+    .binary-str {
+      margin-top: 0.65rem;
+      font-family: "IBM Plex Mono", monospace;
+      background: #1f2937;
+      color: #e5e7eb;
+      border-radius: 10px;
+      padding: 0.7rem;
+      font-size: 0.95rem;
+      overflow-wrap: anywhere;
+    }
+
+    .status {
+      margin-top: 0.55rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--ok);
+    }
+
+    @media (min-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1.1fr 1fr;
+      }
+
+      .calc-grid {
+        grid-template-columns: 1fr 1.25fr;
+      }
+    }
+
+    @keyframes pop {
+      from {
+        transform: translateY(8px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes rise {
+      from {
+        transform: translateY(10px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <section class="hero">
+      <h1>Grafo no dirigido -> Matriz de adyacencia -> Cadena binaria</h1>
+      <p class="subtitle">
+        Construye una matriz de adyacencia binaria para un grafo no dirigido. La pagina refleja automaticamente
+        las entradas simetricas, dibuja el grafo y muestra una cinta de entrada estilo Maquina de Turing con la codificacion completa:
+        <code>&lt;|V| en binario&gt; + &lt;filas de la matriz concatenadas&gt;</code>.
+      </p>
+    </section>
+
+    <section class="panel">
+      <div class="step">
+        <div class="step-badge">1</div>
+        <div>Elige el numero de vertices</div>
+      </div>
+      <div class="controls">
+        <label for="vertexCount">Vertices (2 a 12):</label>
+        <input id="vertexCount" type="number" min="2" max="12" value="4" />
+        <button id="buildBtn" class="btn-main">Crear Matriz</button>
+        <button id="resetBtn" class="btn-alt" type="button">Limpiar</button>
+      </div>
+      <p class="hint">La diagonal se fija en 0 (sin lazos). Haz clic en cualquier entrada triangular superior o inferior para alternar 0/1; su espejo se actualiza automaticamente.</p>
+    </section>
+
+    <section class="panel" id="matrixPanel" hidden>
+      <div class="step">
+        <div class="step-badge">2</div>
+        <div>Llena la matriz de adyacencia con 0 o 1</div>
+      </div>
+      <div class="matrix-wrap" id="matrixWrap"></div>
+      <div class="status" id="statusLine"></div>
+    </section>
+
+    <section class="panel" id="resultPanel" hidden>
+      <div class="step">
+        <div class="step-badge">3</div>
+        <div>Grafo y cinta de entrada de Maquina de Turing</div>
+      </div>
+      <div class="main-grid">
+        <div class="viz-box">
+          <p class="viz-title">Grafo a partir de tu matriz</p>
+          <div class="range-row">
+            <label for="occupancyRange">Tamano del grafo en el lienzo:</label>
+            <input id="occupancyRange" type="range" min="60" max="90" step="1" value="74" />
+            <span id="occupancyValue" class="range-val">74%</span>
+          </div>
+          <svg id="graphSvg" viewBox="0 0 600 420" role="img" aria-label="Visualizacion del grafo"></svg>
+        </div>
+
+        <div class="viz-box">
+          <p class="viz-title">Celdas de la cinta de entrada</p>
+          <div class="tape" id="tape"></div>
+          <div class="sim-controls">
+            <button id="simulateBtn" class="btn-main" type="button">Simular Maquina de Turing</button>
+            <button id="stopSimBtn" class="btn-alt" type="button">Detener</button>
+          </div>
+          <div id="simStatus" class="sim-status"></div>
+          <div id="simResult" class="sim-result"></div>
+          <div class="binary-str" id="binaryString"></div>
+          <p class="hint">La celda amarilla es un separador visual entre |V| y las filas de la matriz.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel" id="calcPanel" hidden>
+      <div class="step">
+        <div class="step-badge">4</div>
+        <div>Calculadora de pasos aproximados y grafica</div>
+      </div>
+      <div class="calc-grid">
+        <div class="calc-box">
+          <p class="viz-title">Estimacion de pasos de la maquina</p>
+          <p class="hint">Modelo aproximado para esta implementacion sobre cinta con desplazamientos y saltos DFS.</p>
+          <div class="calc-row">
+            <label for="inputLengthCalc">Longitud de entrada |L|:</label>
+            <input id="inputLengthCalc" type="number" min="4" value="18" />
+            <button id="calcBtn" class="btn-main" type="button">Calcular</button>
+          </div>
+          <div id="formulaBox" class="formula-box">
+            $$\lvert L \rvert = \lvert bin(n) \rvert + n^2$$
+            $$T(\lvert L \rvert) \approx 2\lvert L \rvert + 3\lvert L \rvert\sqrt{\lvert L \rvert}$$
+            $$T(\lvert L \rvert) \in \Theta\!\left(\lvert L \rvert\sqrt{\lvert L \rvert}\right)$$
+          </div>
+          <table class="calc-table" aria-label="Tabla de estimacion de pasos">
+            <tr>
+              <th>Magnitud</th>
+              <th>Valor</th>
+            </tr>
+            <tr>
+              <td>Longitud actual del string del grafo (|L| actual)</td>
+              <td id="calcLActual">-</td>
+            </tr>
+            <tr>
+              <td>Longitud usada en la estimacion (|L|)</td>
+              <td id="calcLEstimada">-</td>
+            </tr>
+            <tr>
+              <td>Aproximacion de n desde |L|, con n = floor(sqrt(|L|))</td>
+              <td id="calcNApprox">-</td>
+            </tr>
+            <tr>
+              <td>Pasos estimados T(|L|) = 2|L| + 3|L|*sqrt(|L|)</td>
+              <td id="calcSEst">-</td>
+            </tr>
+            <tr>
+              <td>Pasos del recorrido actual (eventos de simulacion)</td>
+              <td id="calcEvents">-</td>
+            </tr>
+          </table>
+          <div id="calcOut" class="calc-out"></div>
+        </div>
+        <div class="calc-box">
+          <p class="viz-title">Grafica de pasos vs longitud de entrada |L|</p>
+          <canvas id="complexityCanvas" width="640" height="260" aria-label="Grafica de complejidad"></canvas>
+          <div class="legend">Referencias de fondo: n (gris), n^2 (azul), n^3 (morado), n^4 (naranja). Curva principal: S(L) (verde).</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const vertexCountInput = document.getElementById("vertexCount");
+    const buildBtn = document.getElementById("buildBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const matrixPanel = document.getElementById("matrixPanel");
+    const resultPanel = document.getElementById("resultPanel");
+    const matrixWrap = document.getElementById("matrixWrap");
+    const tape = document.getElementById("tape");
+    const binaryString = document.getElementById("binaryString");
+    const graphSvg = document.getElementById("graphSvg");
+    const statusLine = document.getElementById("statusLine");
+    const occupancyRange = document.getElementById("occupancyRange");
+    const occupancyValue = document.getElementById("occupancyValue");
+    const simulateBtn = document.getElementById("simulateBtn");
+    const stopSimBtn = document.getElementById("stopSimBtn");
+    const simStatus = document.getElementById("simStatus");
+    const simResult = document.getElementById("simResult");
+    const calcPanel = document.getElementById("calcPanel");
+    const inputLengthCalc = document.getElementById("inputLengthCalc");
+    const calcBtn = document.getElementById("calcBtn");
+    const calcOut = document.getElementById("calcOut");
+    const complexityCanvas = document.getElementById("complexityCanvas");
+    const calcLActual = document.getElementById("calcLActual");
+    const calcLEstimada = document.getElementById("calcLEstimada");
+    const calcNApprox = document.getElementById("calcNApprox");
+    const calcSEst = document.getElementById("calcSEst");
+    const calcEvents = document.getElementById("calcEvents");
+
+    let matrix = [];
+    let n = 0;
+    let occupancyRatio = 0.74;
+    let simTimer = null;
+    let tapeHeadIndex = -1;
+    let currentVertexBits = "";
+    let simActiveVertex = null;
+
+    const toBinary = (value) => value.toString(2);
+
+    const makeMatrix = (size) => {
+      const m = Array.from({ length: size }, () => Array(size).fill(0));
+      return m;
+    };
+
+    const updateStatus = () => {
+      const ones = matrix.flat().reduce((acc, bit) => acc + bit, 0);
+      const undirectedEdges = ones / 2;
+      statusLine.textContent = `El grafo actual tiene ${undirectedEdges} arista(s).`;
+    };
+
+    const buildTable = () => {
+      const table = document.createElement("table");
+      const header = document.createElement("tr");
+      const corner = document.createElement("th");
+      corner.textContent = "v";
+      header.appendChild(corner);
+
+      for (let c = 0; c < n; c += 1) {
+        const th = document.createElement("th");
+        th.textContent = c + 1;
+        header.appendChild(th);
+      }
+      table.appendChild(header);
+
+      for (let r = 0; r < n; r += 1) {
+        const tr = document.createElement("tr");
+        const label = document.createElement("th");
+        label.textContent = r + 1;
+        tr.appendChild(label);
+
+        for (let c = 0; c < n; c += 1) {
+          const td = document.createElement("td");
+
+          if (r === c) {
+            td.className = "diag-cell";
+            td.textContent = "0";
+          } else {
+            const btn = document.createElement("button");
+            btn.className = "bit-btn";
+            btn.type = "button";
+            btn.dataset.r = String(r);
+            btn.dataset.c = String(c);
+            btn.textContent = String(matrix[r][c]);
+            if (matrix[r][c] === 1) {
+              btn.classList.add("active");
+            }
+            btn.addEventListener("click", () => {
+              const next = matrix[r][c] === 0 ? 1 : 0;
+              matrix[r][c] = next;
+              matrix[c][r] = next;
+              render();
+            });
+            td.appendChild(btn);
+          }
+
+          tr.appendChild(td);
+        }
+        table.appendChild(tr);
+      }
+
+      matrixWrap.innerHTML = "";
+      matrixWrap.appendChild(table);
+    };
+
+    const drawGraph = () => {
+      const css = getComputedStyle(document.documentElement);
+      const edgeColor = css.getPropertyValue("--edge").trim() || "#475569";
+      const nodeColor = css.getPropertyValue("--node").trim() || "#0f766e";
+      const nodeTextColor = css.getPropertyValue("--node-text").trim() || "#f8fafc";
+      const activeNodeColor = "#dc2626";
+
+      const width = 600;
+      const height = 420;
+      const centerX = width / 2;
+      const centerY = height / 2;
+
+      // Normalize polygon scale so any n uses a similar fraction of the SVG area.
+      const unitPoints = Array.from({ length: n }, (_, i) => {
+        const angle = (2 * Math.PI * i) / n - Math.PI / 2;
+        return {
+          x: Math.cos(angle),
+          y: Math.sin(angle)
+        };
+      });
+
+      const xs = unitPoints.map((p) => p.x);
+      const ys = unitPoints.map((p) => p.y);
+      const rangeX = Math.max(...xs) - Math.min(...xs);
+      const rangeY = Math.max(...ys) - Math.min(...ys);
+
+      const targetWidth = width * occupancyRatio;
+      const targetHeight = height * occupancyRatio;
+      const scale = Math.min(targetWidth / rangeX, targetHeight / rangeY);
+
+      const points = unitPoints.map((p) => ({
+        x: centerX + p.x * scale,
+        y: centerY + p.y * scale
+      }));
+
+      const lines = [];
+      for (let i = 0; i < n; i += 1) {
+        for (let j = i + 1; j < n; j += 1) {
+          if (matrix[i][j] === 1) {
+            lines.push(`<line x1="${points[i].x}" y1="${points[i].y}" x2="${points[j].x}" y2="${points[j].y}" stroke="${edgeColor}" stroke-width="2.8" stroke-linecap="round" />`);
+          }
+        }
+      }
+
+      const nodes = points
+        .map((p, i) => {
+          const fillColor = simActiveVertex === i ? activeNodeColor : nodeColor;
+          const radius = simActiveVertex === i ? 22 : 19;
+          return `
+            <g>
+              <circle cx="${p.x}" cy="${p.y}" r="${radius}" fill="${fillColor}" />
+              <text x="${p.x}" y="${p.y + 5}" text-anchor="middle" fill="${nodeTextColor}" font-family="IBM Plex Mono, monospace" font-size="14" font-weight="700">${i + 1}</text>
+            </g>
+          `;
+        })
+        .join("");
+
+      graphSvg.innerHTML = `${lines.join("")}${nodes}`;
+    };
+
+    const matrixBits = () => matrix.map((row) => row.join("")).join("");
+
+    const getVertexBitsLength = () => toBinary(n).length;
+    const getMatrixStart = () => getVertexBitsLength() + 1;
+    const getMatrixIndex = (row, col) => getMatrixStart() + row * n + col;
+
+    const stopSimulation = () => {
+      if (simTimer !== null) {
+        clearInterval(simTimer);
+        simTimer = null;
+      }
+      tapeHeadIndex = -1;
+      const headCell = tape.querySelector(".cell.head");
+      if (headCell) {
+        headCell.classList.remove("head");
+      }
+      simActiveVertex = null;
+      if (n > 0) {
+        drawGraph();
+      }
+    };
+
+    const setHead = (index) => {
+      const prev = tape.querySelector(".cell.head");
+      if (prev) {
+        prev.classList.remove("head");
+      }
+      const next = tape.querySelector(`[data-index="${index}"]`);
+      if (next) {
+        next.classList.add("head");
+        next.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
+      tapeHeadIndex = index;
+    };
+
+    const updateTapePrefixWithCounter = (value) => {
+      const width = getVertexBitsLength();
+      const clamped = Math.max(0, value);
+      const bits = clamped.toString(2).padStart(width, "0").slice(-width);
+      currentVertexBits = bits;
+      for (let i = 0; i < width; i += 1) {
+        const cell = tape.querySelector(`[data-index="${i}"]`);
+        if (cell) {
+          cell.textContent = bits[i];
+        }
+      }
+    };
+
+    const buildSimulationEvents = () => {
+      const events = [];
+      const vBitsLen = getVertexBitsLength();
+
+      const pushMoves = (from, to) => {
+        if (from === -1) {
+          events.push({ kind: "move", index: to, msg: "La cabeza se posiciona en la cinta." });
+          return;
+        }
+        const step = to > from ? 1 : -1;
+        for (let i = from + step; i !== to + step; i += step) {
+          events.push({ kind: "move", index: i, msg: "La cabeza avanza en la cinta." });
+        }
+      };
+
+      for (let i = 0; i < vBitsLen; i += 1) {
+        events.push({ kind: "move", index: i, msg: `Leyendo |V| en binario, posicion ${i + 1}/${vBitsLen}.` });
+      }
+
+      const visited = Array(n).fill(false);
+      let remaining = n - 1;
+      visited[0] = true;
+      events.push({ kind: "countdown", value: remaining, msg: `Contador inicial de vertices por descubrir: ${remaining}.` });
+
+      const stack = [{ v: 0, c: 0 }];
+      let cursor = vBitsLen - 1;
+      pushMoves(cursor, getMatrixIndex(0, 0));
+      cursor = getMatrixIndex(0, 0);
+
+      while (stack.length > 0) {
+        const frame = stack[stack.length - 1];
+        events.push({ kind: "vertex", value: frame.v, msg: `Visitando vertice ${frame.v + 1}.` });
+        if (frame.c >= n) {
+          stack.pop();
+          if (stack.length > 0) {
+            const parent = stack[stack.length - 1];
+            const parentIndex = getMatrixIndex(parent.v, Math.min(parent.c, n - 1));
+            pushMoves(cursor, parentIndex);
+            cursor = parentIndex;
+            events.push({ kind: "note", msg: `Regresando por DFS a la fila del vertice ${parent.v + 1}.` });
+            events.push({ kind: "vertex", value: parent.v, msg: `Visitando vertice ${parent.v + 1}.` });
+          }
+          continue;
+        }
+
+        const col = frame.c;
+        const idx = getMatrixIndex(frame.v, col);
+        pushMoves(cursor, idx);
+        cursor = idx;
+
+        const bit = matrix[frame.v][col];
+        events.push({ kind: "note", msg: `Leyendo fila ${frame.v + 1}, columna ${col + 1}: ${bit}.` });
+        frame.c += 1;
+
+        if (bit === 1 && !visited[col]) {
+          visited[col] = true;
+          remaining -= 1;
+          events.push({ kind: "countdown", value: remaining, msg: `Se encontro conexion nueva con vertice ${col + 1}. Contador: ${remaining}.` });
+          const jumpTo = getMatrixIndex(col, 0);
+          pushMoves(cursor, jumpTo);
+          cursor = jumpTo;
+          events.push({ kind: "note", msg: `Salto a la fila del vertice ${col + 1} para continuar DFS.` });
+          events.push({ kind: "vertex", value: col, msg: `Visitando vertice ${col + 1}.` });
+          stack.push({ v: col, c: 0 });
+        }
+      }
+
+      const connected = visited.every(Boolean);
+      events.push({ kind: "halt", value: connected ? 1 : 0, msg: connected ? "La maquina termina con salida 1 (grafo conectado)." : "La maquina termina con salida 0 (grafo desconectado)." });
+      return events;
+    };
+
+    const runSimulation = () => {
+      stopSimulation();
+      renderTape();
+      simResult.textContent = "";
+      simStatus.textContent = "Iniciando simulacion...";
+
+      const events = buildSimulationEvents();
+      let pos = 0;
+      simTimer = setInterval(() => {
+        const step = events[pos];
+        if (!step) {
+          stopSimulation();
+          return;
+        }
+
+        if (step.kind === "move") {
+          setHead(step.index);
+        }
+
+        if (step.kind === "countdown") {
+          updateTapePrefixWithCounter(step.value);
+        }
+
+        if (step.kind === "halt") {
+          simResult.textContent = `Resultado de la maquina: ${step.value}`;
+        }
+
+        if (step.kind === "vertex") {
+          simActiveVertex = step.value;
+          drawGraph();
+        }
+
+        simStatus.textContent = step.msg;
+        pos += 1;
+
+        if (pos >= events.length) {
+          stopSimulation();
+        }
+      }, 320);
+    };
+
+    const estimateStepsFromLength = (lengthValue) => {
+      const l = Math.max(4, Number.parseInt(lengthValue, 10) || 4);
+      const approxN = Math.max(2, Math.floor(Math.sqrt(l)));
+      const estimated = Math.round(2 * l + 3 * l * Math.sqrt(l));
+      return { l, approxN, estimated };
+    };
+
+    const drawComplexityPlot = () => {
+      const ctx = complexityCanvas.getContext("2d");
+      if (!ctx) {
+        return;
+      }
+
+      const w = complexityCanvas.width;
+      const h = complexityCanvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      const padL = 54;
+      const padR = 18;
+      const padT = 16;
+      const padB = 36;
+      const pw = w - padL - padR;
+      const ph = h - padT - padB;
+
+      const maxL = Math.max(12, Math.min(40, Number.parseInt(inputLengthCalc.value, 10) || 30));
+      const curveS = [];
+      const curveN1 = [];
+      const curveN2 = [];
+      const curveN3 = [];
+      const curveN4 = [];
+      let maxY = 1;
+      for (let x = 1; x <= maxL; x += 1) {
+        const yS = estimateStepsFromLength(x).estimated;
+        const y1 = x;
+        const y2 = x ** 2;
+        const y3 = x ** 3;
+        const y4 = x ** 4;
+        curveS.push({ x, y: yS });
+        curveN1.push({ x, y: y1 });
+        curveN2.push({ x, y: y2 });
+        curveN3.push({ x, y: y3 });
+        curveN4.push({ x, y: y4 });
+        const localMax = Math.max(yS, y1, y2, y3, y4);
+        if (localMax > maxY) {
+          maxY = localMax;
+        }
+      }
+
+      const yStep = Math.max(1, Math.ceil(maxY / 10));
+
+      for (let gx = 1; gx <= maxL; gx += 1) {
+        const px = padL + ((gx - 1) / (maxL - 1 || 1)) * pw;
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.18)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(px, padT);
+        ctx.lineTo(px, h - padB);
+        ctx.stroke();
+      }
+
+      for (let gy = 0; gy <= maxY; gy += yStep) {
+        const py = h - padB - (gy / maxY) * ph;
+        ctx.strokeStyle = "rgba(148, 163, 184, 0.18)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(padL, py);
+        ctx.lineTo(w - padR, py);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padL, padT);
+      ctx.lineTo(padL, h - padB);
+      ctx.lineTo(w - padR, h - padB);
+      ctx.stroke();
+
+      ctx.fillStyle = "#475569";
+      ctx.font = '12px "IBM Plex Mono"';
+      ctx.fillText("Pasos", 8, padT + 8);
+      ctx.fillText("|L| (tamano de entrada)", w - 155, h - 8);
+
+      const drawCurve = (points, color, width) => {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = width;
+        ctx.beginPath();
+        points.forEach((p, i) => {
+          const px = padL + ((p.x - 1) / (maxL - 1 || 1)) * pw;
+          const py = h - padB - (p.y / maxY) * ph;
+          if (i === 0) {
+            ctx.moveTo(px, py);
+          } else {
+            ctx.lineTo(px, py);
+          }
+        });
+        ctx.stroke();
+      };
+
+      drawCurve(curveN1, "#9ca3af", 1.2);
+      drawCurve(curveN2, "#60a5fa", 1.2);
+      drawCurve(curveN3, "#a78bfa", 1.2);
+      drawCurve(curveN4, "#f59e0b", 1.2);
+      drawCurve(curveS, "#0f766e", 2.4);
+
+      const current = estimateStepsFromLength(inputLengthCalc.value);
+      const clampedX = Math.min(maxL, Math.max(1, current.l));
+      const cx = padL + ((clampedX - 1) / (maxL - 1 || 1)) * pw;
+      const cy = h - padB - (current.estimated / maxY) * ph;
+      ctx.fillStyle = "#dc2626";
+      ctx.beginPath();
+      ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = "#111827";
+      ctx.fillText(`L=${current.l}`, Math.max(padL, cx - 18), h - 18);
+    };
+
+    const updateCalculator = () => {
+      const currentLength = toBinary(n).length + n * n;
+      const currentInput = Number.parseInt(inputLengthCalc.value, 10) || 0;
+      if (currentInput < 4) {
+        inputLengthCalc.value = String(currentLength);
+      }
+      const current = estimateStepsFromLength(inputLengthCalc.value);
+      const fromCurrentGraph = buildSimulationEvents().length;
+      calcLActual.textContent = String(currentLength);
+      calcLEstimada.textContent = String(current.l);
+      calcNApprox.textContent = String(current.approxN);
+      calcSEst.textContent = String(current.estimated);
+      calcEvents.textContent = String(fromCurrentGraph);
+      calcOut.textContent = `Comparacion rapida: para la instancia actual, eventos reales = ${fromCurrentGraph} y estimacion asintotica para |L|=${current.l} es T(|L|)=${current.estimated}.`;
+
+      if (window.MathJax && window.MathJax.typesetPromise) {
+        window.MathJax.typesetPromise();
+      }
+      drawComplexityPlot();
+    };
+
+    const renderTape = () => {
+      const vertexBits = toBinary(n);
+      const mBits = matrixBits();
+      const full = `${vertexBits}${mBits}`;
+      currentVertexBits = vertexBits;
+
+      tape.innerHTML = "";
+      let idx = 0;
+      [...vertexBits].forEach((bit) => {
+        const cell = document.createElement("div");
+        cell.className = "cell vertex";
+        cell.textContent = bit;
+        cell.dataset.index = String(idx);
+        tape.appendChild(cell);
+        idx += 1;
+      });
+
+      const separator = document.createElement("div");
+      separator.className = "cell sep";
+      separator.textContent = "|";
+      separator.dataset.index = String(idx);
+      tape.appendChild(separator);
+      idx += 1;
+
+      [...mBits].forEach((bit) => {
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.textContent = bit;
+        cell.dataset.index = String(idx);
+        tape.appendChild(cell);
+        idx += 1;
+      });
+
+      binaryString.textContent = `Cadena binaria = ${vertexBits} + ${mBits} = ${full}`;
+    };
+
+    const render = () => {
+      buildTable();
+      drawGraph();
+      stopSimulation();
+      renderTape();
+      updateStatus();
+      updateCalculator();
+      simStatus.textContent = "";
+      simResult.textContent = "";
+      matrixPanel.hidden = false;
+      resultPanel.hidden = false;
+      calcPanel.hidden = false;
+    };
+
+    const init = () => {
+      const parsed = Number.parseInt(vertexCountInput.value, 10);
+      if (Number.isNaN(parsed) || parsed < 2 || parsed > 12) {
+        statusLine.style.color = "var(--danger)";
+        statusLine.textContent = "Por favor elige un numero entre 2 y 12.";
+        matrixPanel.hidden = false;
+        resultPanel.hidden = true;
+        return;
+      }
+
+      statusLine.style.color = "var(--ok)";
+      n = parsed;
+      matrix = makeMatrix(n);
+      render();
+    };
+
+    buildBtn.addEventListener("click", init);
+    resetBtn.addEventListener("click", () => {
+      if (n > 0) {
+        matrix = makeMatrix(n);
+        render();
+      }
+    });
+
+    occupancyRange.addEventListener("input", () => {
+      occupancyRatio = Number.parseInt(occupancyRange.value, 10) / 100;
+      occupancyValue.textContent = `${occupancyRange.value}%`;
+      if (n > 0) {
+        drawGraph();
+      }
+    });
+
+    simulateBtn.addEventListener("click", () => {
+      if (n >= 2) {
+        runSimulation();
+      }
+    });
+
+    stopSimBtn.addEventListener("click", () => {
+      stopSimulation();
+      simStatus.textContent = "Simulacion detenida.";
+    });
+
+    calcBtn.addEventListener("click", () => {
+      updateCalculator();
+    });
+
+    inputLengthCalc.addEventListener("input", () => {
+      updateCalculator();
+    });
+
+    init();
+  </script>
+</body>
+</html>
